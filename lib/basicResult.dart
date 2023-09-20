@@ -13,6 +13,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 // import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
+import 'package:flutter/services.dart';
 
 //資料庫部分(基本上在這頁就會把所有資訊寫入資料庫，之後於其他頁面只要從資料庫讀去就好，不用再去連線server要資料)
 String resultAllMsg = ''; //server 回傳的所有data，包含斷語。
@@ -21,6 +22,7 @@ List<int> pointX = [];
 List<int> pointY = []; //點x,y座標(server會回傳148個點)
 String cropFace_points_string = ''; //全臉點圖String
 bool gifSaved = false;
+String basicResultText = ''; //斷語文本
 
 class BasicResult extends StatefulWidget {
   const BasicResult({Key? key}) : super(key: key);
@@ -133,7 +135,7 @@ class _BasicResultState extends State<BasicResult>
         // msgBytes.addAll(utf8.encode(msg));
         // msgBytes.add(0);
         // socket.add(msgBytes);
-        
+
         await socket.close();
         break;
       }
@@ -355,39 +357,94 @@ class _BasicResultState extends State<BasicResult>
                                     },
                                   ))),
 
+                      // //簡要內容
+                      // Expanded(
+                      //     flex: 1,
+                      //     child: ListView.builder(
+                      //         padding: new EdgeInsets.only(top: 10, bottom: 10),
+                      //         itemBuilder: (context, index) => Container(
+                      //                 child: Column(
+                      //               children: [
+                      //                 Container(
+                      //                     width: screenWidth,
+                      //                     child: Text(
+                      //                       allBasicTitle[index].trim(),
+                      //                       textAlign: TextAlign.start,
+                      //                       style: TextStyle(
+                      //                           color: Colors.yellow[300],
+                      //                           fontSize: 25),
+                      //                     )),
+                      //                 Container(
+                      //                   width: screenWidth,
+                      //                   child: Text(
+                      //                     allBasicTextOfTitle[index].trim(),
+                      //                     textAlign: TextAlign.start,
+                      //                     style: const TextStyle(
+                      //                         color: Colors.white,
+                      //                         fontSize: 20),
+                      //                   ),
+                      //                 ),
+                      //                 const SizedBox(
+                      //                   height: 20,
+                      //                 ),
+                      //               ],
+                      //             )),
+                      //         itemCount: allBasicTitle.length)),
+
                       //簡要內容
                       Expanded(
                           flex: 1,
-                          child: ListView.builder(
-                              padding: new EdgeInsets.only(top: 10, bottom: 10),
-                              itemBuilder: (context, index) => Container(
-                                      child: Column(
-                                    children: [
-                                      Container(
-                                          width: screenWidth,
-                                          child: Text(
-                                            allBasicTitle[index].trim(),
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: Colors.yellow[300],
-                                                fontSize: 25),
-                                          )),
-                                      Container(
-                                        width: screenWidth,
-                                        child: Text(
-                                          allBasicTextOfTitle[index].trim(),
-                                          textAlign: TextAlign.start,
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                    ],
-                                  )),
-                              itemCount: allBasicTitle.length)),
+                          child: GestureDetector(
+                              onLongPress: () {
+                                print('已長按斷語，將斷語複製到剪貼簿');
+                                for (int i = 0; i < allBasicTitle.length; i++) {
+                                  basicResultText +=
+                                      '${allBasicTitle[i]}\n${allBasicTextOfTitle[i]}\n';
+                                }
+                                Clipboard.setData(
+                                    ClipboardData(text: basicResultText));
+
+                                setState(() {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        const AlertDialog(
+                                      title: Text('斷語已複製剪貼簿'),
+                                    ),
+                                  );
+                                });
+                              },
+                              child: ListView.builder(
+                                  padding:
+                                      new EdgeInsets.only(top: 10, bottom: 10),
+                                  itemBuilder: (context, index) => Container(
+                                          child: Column(
+                                        children: [
+                                          Container(
+                                              width: screenWidth,
+                                              child: Text(
+                                                allBasicTitle[index].trim(),
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: Colors.yellow[300],
+                                                    fontSize: 25),
+                                              )),
+                                          Container(
+                                            width: screenWidth,
+                                            child: Text(
+                                              allBasicTextOfTitle[index].trim(),
+                                              textAlign: TextAlign.start,
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                        ],
+                                      )),
+                                  itemCount: allBasicTitle.length))),
                     ],
                   ))),
     );

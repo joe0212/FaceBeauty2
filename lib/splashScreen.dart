@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'login.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
@@ -8,7 +9,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
   late AnimationController _opacityController;
   late Animation<double> _opacityAnimation;
 
@@ -34,16 +36,16 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
       //   MaterialPageRoute(
       //     builder: (_) => Login(),
       //     maintainState: false,
-          
+
       //   ),
       // );
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => Login()),
       ).then((value) => setState(() {
-        // Do any initialization here
-        initState();
-      }));
+            // Do any initialization here
+            initState();
+          }));
     });
   }
 
@@ -89,7 +91,6 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                 ),
               ),
             ),
-            
             Expanded(flex: 3, child: Container()),
           ],
         ),

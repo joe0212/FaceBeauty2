@@ -21,8 +21,8 @@ Future<void> main() async {
   ]);
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false, // 移除 DEBUG 圖示
-    home: SplashScreen(),  // 先跳轉至 SplashScreen page，再跳轉至 Login page
-    // home: MyApp(), 
+    home: SplashScreen(), // 先跳轉至 SplashScreen page，再跳轉至 Login page
+    // home: MyApp(),
     // home: Login(),
   ));
 }
