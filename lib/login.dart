@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'home.dart';
 import 'dart:math';
 import 'parameter.dart';
+import 'package:flutter/material.dart';
 
 var passwordRememberFlag = 0;
 TextEditingController accountCon = TextEditingController();
@@ -89,8 +90,8 @@ class _LoginState extends State<Login> {
         iniAccount = '';
         iniPassword = '';
       }
-      _usernameController..text = iniAccount;
-      _passwordController..text = iniPassword;
+      _usernameController.text = iniAccount;
+      _passwordController.text = iniPassword;
       firstLoginFlag = false;
       setState(() {});
     }
